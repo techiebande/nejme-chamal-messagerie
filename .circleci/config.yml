@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  e2e:
+    docker:
+      - image: cimg/node:20.19
+    resource_class: medium
+    steps:
+      - checkout
+      - run:
+          name: Install pnpm
+          command: npm install -g pnpm@10.30.3
+      - restore_cache:
+          keys:
+            - pnpm-v1-{{ checksum "pnpm-lock.yaml" }}
+            - pnpm-v1-
+      - run:
+          name: Install dependencies
+          command: pnpm install --frozen-lockfile
+      - save_cache:
+          key: pnpm-v1-{{ checksum "pnpm-lock.yaml" }}
+          paths:
+            - ~/.local/share/pnpm/store
+      - run:
+          name: Install Playwright browsers
+          command: pnpm exec playwright install --with-deps chromium
+      - run:
+          name: Run E2E tests
+          command: pnpm test:e2e
+      - store_artifacts:
+          path: playwright-report
+          destination: playwright-report
+
+workflows:
+  ci:
+    jobs:
+      - e2e
