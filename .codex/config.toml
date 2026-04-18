@@ -1,0 +1,17 @@
+# NCM — Codex MCP Server Configuration
+# Project-scoped. Applies to AI 2 (Codex) sessions in this repo.
+# See AGENTS.md for when and how to use each server.
+
+[mcp_servers.context7]
+url = "https://mcp.context7.com/mcp"
+
+[mcp_servers.deepwiki]
+url = "https://mcp.deepwiki.com/mcp"
+
+[mcp_servers.playwright]
+command = "npx"
+args = ["@playwright/mcp@latest"]
+
+[mcp_servers.shadcn]
+command = "npx"
+args = ["shadcn@latest", "mcp"]
