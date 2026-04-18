@@ -160,3 +160,10 @@ Check your tool's MCP documentation for the config file location and format. The
 - Format: H1 = the question this file answers, H2 = steps or sub-topics (200–400 words each), numbered steps with transitions, no tables.
 - All NCM-specific terminology defined in parentheses on first use.
 - AI 1 milestone plans must name the guide file(s) AI 2 must produce.
+
+## Git Commit Rules
+
+- Use Conventional Commit prefixes for every commit: `feat`, `fix`, `chore`, `refactor`, `test`, or `docs`.
+- When a commit belongs to a milestone, include the milestone ID as the scope: `type(m-001b): summary`.
+- Write commit summaries in imperative mood and keep them short and specific.
+- Infrastructure, setup, and repository maintenance work defaults to `chore(...)` unless a more specific type is clearly correct.

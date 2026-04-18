@@ -21,17 +21,12 @@ A milestone MUST specify whether a browser test is required.
 
 ## Current Milestone
 
-M-001b — Git repository, testing infrastructure, and environment baseline
+M-001b — Git repository, testing infrastructure, environment baseline, and CI/CD
 
-**Status:** Ready for AI 1 planning
-**Exit condition:** A git repository exists in the working directory with a proper `.gitignore`; Vitest + React Testing Library are installed and `pnpm test` passes with at least one smoke test; Playwright is installed and `pnpm test:e2e` passes with at least one smoke test; a `.env.local.example` file documents all required server-side env vars; and all existing checks (`pnpm lint`, `pnpm build`) still pass.
-**Browser test required:** No — this milestone has no user-facing output. It is infrastructure only.
-**MCP servers to connect before this milestone (and all subsequent milestones):**
-- `@playwright/mcp` — official Microsoft-maintained Playwright MCP server (https://playwright.dev/docs/getting-started-mcp). Enables AI 2 to navigate the running app live and verify UI behavior before writing committed test files. No credentials required.
-- `context7` — Upstash-maintained documentation server (https://github.com/upstash/context7). Pulls current, version-specific docs for Next.js 16, React 19, Tailwind v4, shadcn/ui CLI v4, Vitest, and TanStack Query directly into AI 2's context. Prevents hallucinated APIs from stale training data. No credentials required. Remote HTTP server — no local install.
-- `shadcn` (already listed) — required from M-002 onward.
-
-All three must be in `.mcp.json` before M-001b implementation starts.
+**Status:** Reopened — CI/CD patch added, waiting for first hosted green run
+**Exit condition:** A git repository exists in the working directory with a proper `.gitignore`; Vitest + React Testing Library are installed and `pnpm test` passes with at least one smoke test; Playwright is installed and `pnpm test:e2e` passes with at least one smoke test; a `.env.local.example` file documents all required server-side env vars; all existing local checks (`pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm test`, `pnpm test:e2e`) pass; and a GitHub Actions pipeline runs the same validation in CI while producing a release artifact on `main`.
+**Browser test required:** No — this milestone remains infrastructure only.
+**Notes:** M-002 is blocked until the reopened M-001b closes again with a confirmed hosted workflow run.
 
 ## Backlog
 

@@ -86,6 +86,7 @@ Rules during implementation:
 - Do not add features, refactor, or introduce abstractions beyond what the plan requires
 - Do not implement partial solutions — complete each step fully before moving to the next
 - If a step turns out to be impossible as specified, report the blocker immediately — do not substitute a different approach without AI 1's agreement
+- If you are asked to create a commit, use the repo's Conventional Commit format. When the work belongs to a milestone, include the milestone ID as the scope: `type(m-001b): summary`.
 
 ---
 

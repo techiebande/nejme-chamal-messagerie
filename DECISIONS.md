@@ -158,3 +158,21 @@ Format rules (based on AWS RAG best-practices research):
 **Why:** Context7 covers API reference well but does not explain underlying library behaviour. DeepWiki fills that gap: when docs contradict observed behaviour, or when understanding a library's internals is required to write correct integration code, DeepWiki provides source-level architectural context. Both are free, no-auth, HTTP remote servers — zero cost to connect both.
 **Implications:** `AGENTS.md` now documents both servers with explicit "when to use" and "how to use" instructions. AI 1 and AI 2 must use Context7 for API reference and DeepWiki for architectural/internal questions. Neither replaces the other. Both must be connected at all times.
 **Decided by:** Founder
+
+---
+
+## 2026-04-18 — Git commits use Conventional Commits with milestone scope
+
+**Decision:** Git commits for this repo use Conventional Commit prefixes. When a commit belongs to a milestone, the milestone ID is included as the scope, for example `chore(m-001b): initialize git, testing infrastructure, and env baseline`.
+**Why:** The project already tracks delivery by milestone, but plain free-form commit messages make history harder to scan. Adding a standard commit type plus milestone scope keeps history readable for both day-to-day work and milestone review.
+**Implications:** `AGENTS.md` and AI 2 implementation instructions must tell agents to use commit messages like `feat(m-002): ...`, `fix(m-003): ...`, `chore(m-001b): ...`, `test(m-002): ...`, or `docs(m-004): ...` as appropriate. Infrastructure and repository setup work defaults to `chore(...)` unless a more specific type is clearly correct.
+**Decided by:** Founder
+
+---
+
+## 2026-04-18 — M-001b now includes hosted CI/CD, not just local checks
+
+**Decision:** M-001b is reopened and expanded to require a hosted GitHub Actions pipeline in addition to the already completed local testing and environment baseline. The pipeline must run lint, typecheck, build, unit/integration tests, and Playwright E2E checks in CI, and publish a releasable build artifact from `main` for continuous delivery.
+**Why:** Local commands alone are not enough to prove the project is continuously validated after each push. The foundation milestone should leave the repo with a shared automation path that every future milestone can rely on.
+**Implications:** M-001b stays open until the new workflow records a confirmed green hosted run. M-002 must not start until that happens. Future milestone closeout can assume the repository already has a baseline GitHub Actions path for validation and delivery artifacts.
+**Decided by:** Founder

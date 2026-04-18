@@ -8,73 +8,74 @@
 ## Last Session
 
 **Date:** 2026-04-18
-**Milestone:** Planning and architecture correction session — no code written
-**Outcome:** Three critical structural gaps (testing, RAG documentation, API layer) were identified, researched, and resolved. All planning documents are now current and internally consistent. The correct next milestone is M-001b, not M-002.
+**Milestone:** M-001b — Git repository, testing infrastructure, and environment baseline
+**Outcome:** M-001b was originally marked complete, but it has been reopened after the milestone scope was patched to require hosted CI/CD in addition to local testing infrastructure.
 
 ---
 
 ## What Was Done
 
-**Gap audit:**
-- Identified: no testing strategy in any planning document
-- Identified: no RAG documentation process or format defined
-- Identified: api-proxy pattern unresolved
-- Identified: no git repository in the working directory
-- Identified: no environment variable strategy
-- Identified (deferred): no error handling conventions, no loading state conventions, no locale/currency formatting, no print/label generation plan, no auth middleware shape
+**Implementation completed:**
+- Ran `git init` in `/Users/obande/Desktop/workspace/nejme-chamal-messagerie` and confirmed `.git/` exists at the repo root
+- Added Playwright artifact paths to `.gitignore`
+- Installed `clsx` and `tailwind-merge` as production dependencies
+- Installed Vitest, React Testing Library, Playwright, and their supporting dev dependencies
+- Created `vitest.config.mts`, `vitest.setup.ts`, `lib/utils.ts`, `lib/utils.test.ts`, `playwright.config.ts`, `e2e/smoke.spec.ts`, and `.env.local.example`
+- Updated `package.json` scripts for `test`, `test:watch`, and `test:e2e`
+- Replaced the scaffold's remote `next/font/google` Geist setup with a local Arial/Helvetica stack so production builds do not depend on Google Fonts access
+- Added a GitHub Actions CI/CD workflow that runs lint, typecheck, build, unit/integration tests, and Playwright E2E checks, then publishes a release artifact on `main`
 
-**Decisions made and recorded in DECISIONS.md:**
-- BFF pattern: all backend calls hidden from browser via typed Next.js Route Handlers. `BACKEND_API_URL` is server-only. Resolves the PENDING api-proxy entry.
-- Testing infrastructure: Vitest + React Testing Library (unit/integration) + Playwright (E2E)
-- RAG documentation format: French-language markdown in `docs/guide/[module]/[workflow].md`, one file per user workflow, H2 sections 200–400 words, no tables, no technical terms, session starters per section
-- Context7 MCP server (Upstash): connected for all milestones — pulls current docs for Next.js 16, React 19, Tailwind v4, shadcn/ui CLI v4, Vitest, TanStack Query into AI 2's context
-- AI 1 search protocol: vendor doc search required for every service a milestone touches, no exceptions — recorded after AI 1 missed the official Playwright MCP server by not searching
+**Verification completed:**
+- `pnpm typecheck` passed
+- `pnpm lint` passed
+- `pnpm build` passed
+- `pnpm test` passed with 2 unit tests green
+- `pnpm test:e2e` passed with 1 Playwright smoke test green when rerun outside the Codex sandbox
+- The repository now includes a hosted CI/CD workflow definition, but it still needs its first confirmed green GitHub Actions run before M-001b can be closed again
 
 **Documents updated:**
-- `DECISIONS.md` — 4 new entries appended; PENDING api-proxy entry marked resolved
-- `SPEC.md` — testing and RAG documentation added to In Scope; backend URL exposure added to Out of Scope
-- `FRONTEND_ARCHITECTURE.md` — API Layer Architecture, Testing Architecture, and RAG Documentation sections added
-- `AGENTS.md` — Testing Rules, Documentation Rules, and MCP Tools (mandatory usage) sections added
-- `MILESTONE_LOG.md` — M-001b inserted as current milestone; M-002 moved to first backlog position; MCP servers documented for M-001b
+- `AGENTS.md` — added Conventional Commit rules with milestone scope guidance
+- `DECISIONS.md` — recorded Conventional Commits with milestone scope as the repo standard
+- `MILESTONE_LOG.md` — reopened M-001b with CI/CD in scope and moved M-002 back to backlog
 
-**Plans produced:**
-- M-002 full implementation plan — drafted and complete, but **on hold until M-001b is done**
-- M-001b full implementation plan — produced and ready for AI 2 review
+**Important environment note:**
+- The Codex sandbox could not complete `git add -A` because it was blocked from creating `.git/index.lock`
+- The Codex sandbox still blocks Playwright's local `webServer` from binding a port, so `pnpm test:e2e` must run either outside the sandbox or in hosted CI
+- The actual project state is therefore based on local Codex-run checks plus one outside-sandbox Codex E2E verification
 
 ## What Was NOT Done (and why)
 
-- No code written — this was a planning and correction session
-- M-001b plan not yet reviewed by AI 2 — session closed before AI 2 was engaged
-- M-002 plan paused — M-001b is the prerequisite
+- The initial git commit was not created from Codex because the sandbox could not write `.git/index.lock`
+- M-002 was not started — M-001b was completed first as required
 - Deferred gaps not yet in milestone plans: error handling conventions, loading state conventions, Moroccan French locale/MAD currency formatting, print/label generation (critical for Expeditions), auth middleware shape — these must be addressed in their respective milestone plans before those features are built
 
 ## Known Issues / Warnings
 
-- **No git repository in the working directory.** First task of M-001b. No version control until this is done.
-- **The M-001b plan requires AI 2 to install `clsx` and `tailwind-merge` as production dependencies** — these will also be needed by shadcn in M-002, so it is not wasted work.
+- **The founder still needs to run the initial commit locally.** Use the new commit convention: `chore(m-001b): initialize git, testing infrastructure, env baseline, and ci-cd`.
 - **shadcn init with Tailwind v4 behaves differently from v3** — AI 2 must use Context7 to fetch current shadcn docs before running init in M-002.
+- **M-001b is open again until GitHub Actions is green.** Local checks are necessary but not sufficient after the milestone patch.
+- **Playwright now uses a webpack-backed build path inside `playwright.config.ts`.** This avoids the sandbox-only Turbopack startup panic, while the normal project build remains on Turbopack.
 - Print/label generation is a daily operational requirement for NCM (expedition labels, barcodes) — it is not planned yet. Must be addressed before the Expeditions milestone.
 
 ## State of the Codebase Right Now
 
-The repo contains a working Next.js 16 scaffold (App Router, TypeScript, Tailwind v4, ESLint) with no git history and no testing infrastructure. All planning documents are current and internally consistent. The architecture is fully decided across all dimensions: BFF pattern, design system, state management, testing, documentation. No feature code exists. The app renders the default Next.js scaffold page. Three MCP servers are documented for connection: Context7 (Upstash), Playwright (Microsoft), and shadcn (Vercel).
+The repo now contains a working Next.js 16 scaffold with git initialized, Vitest + React Testing Library, Playwright smoke coverage, `.env.local.example`, a GitHub Actions CI/CD workflow, and the `cn` utility that M-002 will build on. The app still renders the scaffold page, but it now uses a local Arial/Helvetica stack instead of remote Google-hosted Geist. All planning documents are current and internally consistent. Four MCP servers are documented for connection: Context7 (Upstash), DeepWiki (Cognition AI), Playwright (Microsoft), and shadcn (Vercel).
 
 ---
 
 ## Next Session
 
-**Milestone:** M-001b — Git repository, testing infrastructure, and environment baseline
-**AI 1's first task:** Hand the M-001b plan to AI 2 for review. The plan is already written — no new planning needed. Confirm the three MCP servers are connected (`/mcp` in Claude Code), then relay the plan.
+**Milestone:** M-001b — Git repository, testing infrastructure, environment baseline, and CI/CD
+**AI 1's first task:** Confirm the first hosted GitHub Actions run for the new CI/CD workflow, then either re-close M-001b or relay any fixes needed before M-002 starts.
 
 ## Open Questions for AI 1
 
-1. After M-001b and M-002 are complete, revisit the deferred gaps before starting M-003: error handling conventions, loading state patterns, and auth middleware shape all affect M-003 architecture.
+1. Before starting M-003, revisit the deferred gaps after M-002 closes: error handling conventions, loading state patterns, and auth middleware shape all affect M-003 architecture.
 2. Print/label generation planning — must happen before the Expeditions milestone. Research whether Next.js has a print-layout pattern or whether a library is needed.
 3. Locale formatting — MAD (Moroccan Dirham) and Moroccan French date formats need a consistent `Intl` strategy before any financial module is built.
 
 ## Open Questions for AI 2
 
-1. Verify the three MCP servers are connected before starting M-001b: run `/mcp` in Claude Code and confirm context7, playwright, and shadcn all show as Connected.
-2. When running `git init`, confirm the working directory is `/Users/obande/Desktop/workspace/nejme-chamal-messagerie` — not a subdirectory.
-3. Vitest with Next.js 16 / React 19 requires specific configuration — use Context7 to fetch current Vitest docs (`resolve-library-id` → "Vitest", then `query-docs` for "configure vitest with Next.js App Router") before writing `vitest.config.ts`.
-4. The M-001b plan requires a minimal `lib/utils.ts` (cn utility) so the Vitest smoke test can compile. shadcn will overwrite this file in M-002 — that is expected and fine.
+1. Verify the four MCP servers are connected before starting M-002: confirm context7, deepwiki, playwright, and shadcn are all available to the active agent.
+2. Use the new commit convention for any reopened M-001b commit: `type(m-001b): summary`, with `chore(...)` as the default for setup-only changes.
+3. Reuse the existing `lib/utils.ts` `cn()` helper during shadcn setup rather than replacing it with a different path or name once M-002 resumes.
